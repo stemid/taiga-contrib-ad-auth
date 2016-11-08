@@ -113,7 +113,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
     try:
         conn.search(
             search_base=AD_SEARCH_BASE,
-            search_filter=AD_SEARCH_FILTER,
+            search_filter=search_filter,
             search_scope=SUBTREE,
             attributes=[AD_EMAIL_PROPERTY, AD_FULLNAME_PROPERTY],
             paged_size=5
