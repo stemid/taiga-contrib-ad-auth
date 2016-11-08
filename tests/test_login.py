@@ -20,7 +20,7 @@ conf_defaults = {
 config = RawConfigParser(defaults=conf_defaults)
 config.readfp(open('tests/tests_local.cfg'))
 
-def test_ad_login_success():
+def test_ad_login():
     (email, username) = connector.login(
         config.get('DEFAULT', 'username'),
         config.get('DEFAULT', 'password')
@@ -32,5 +32,18 @@ def test_ad_login_success():
     ))
 
 
+def test_ldap_lookup():
+    (email, fullname) = connector.do_ldap_search(
+        config.get('DEFAULT', 'username'),
+        config.get('DEFAULT', 'password')
+    )
+
+    print('Success: {email}, {fullname}'.format(
+        email=email,
+        fullname=fullname
+    ))
+
+
 if __name__ == '__main__':
-    test_ad_login_success()
+    test_ad_login()
+    test_ldap_lookup()
