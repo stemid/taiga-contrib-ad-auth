@@ -18,6 +18,8 @@ from taiga.base.utils.slug import slugify_uniquely
 from taiga.auth.signals import user_registered as user_registered_signal
 from taiga.auth.services import make_auth_response_data
 
+from . import connector
+
 
 @tx.atomic
 def ad_register(username: str, email: str, full_name: str):
@@ -36,10 +38,16 @@ def ad_register(username: str, email: str, full_name: str):
         user = user_model.objects.get(username=username)
     except user_model.DoesNotExist:
         # Create a new user
-        username_unique = slugify_uniquely(username, user_model, slugfield="username")
-        user = user_model.objects.create(email=email,
-                                         username=username_unique,
-                                         full_name=full_name)
+        username_unique = slugify_uniquely(
+            username,
+            user_model,
+            slugfield="username"
+        )
+        user = user_model.objects.create(
+            email=email,
+            username=username_unique,
+            full_name=full_name
+        )
         user_registered_signal.send(sender=user.__class__, user=user)
 
     return user
