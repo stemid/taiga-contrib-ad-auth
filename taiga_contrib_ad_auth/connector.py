@@ -74,7 +74,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
         raise ADLoginError({'error_message': str(e)})
 
     conn = None
-    ldap_auth = BIND_PASSWORD
+    ldap_auth = SIMPLE
     ldap_user = username
     ldap_password = password
     
