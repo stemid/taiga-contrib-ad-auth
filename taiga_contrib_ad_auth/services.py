@@ -57,7 +57,7 @@ def ad_login_func(request):
     username = request.DATA.get('username', None)
     password = request.DATA.get('password', None)
 
-    email, full_name = connector.login(username=username, password=password)
+    email, full_name = connector.login(email=username, password=password)
     user = ad_register(username=username, email=email, full_name=full_name)
     data = make_auth_response_data(user)
     return data
