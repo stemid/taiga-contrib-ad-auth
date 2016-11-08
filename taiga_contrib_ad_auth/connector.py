@@ -35,6 +35,11 @@ class LDAPLookupError(ConnectorBaseException):
 
 # Kerberos
 AD_REALM = getattr(settings, "AD_REALM", "")
+AD_SHORT_REALM = getattr(
+    settings,
+    "AD_SHORT_REALM",
+    AD_REALM.split('.')[0]
+)
 AD_ALLOWED_DOMAINS = getattr(settings, "AD_ALLOWED_DOMAINS", [])
 AD_DEFAULT_DOMAIN = getattr(settings, "AD_DEFAULT_DOMAIN", AD_REALM)
 
@@ -42,7 +47,7 @@ AD_DEFAULT_DOMAIN = getattr(settings, "AD_DEFAULT_DOMAIN", AD_REALM)
 AD_LDAP_SERVER = getattr(settings, "AD_LDAP_SERVER", "")
 AD_LDAP_PORT = getattr(settings, "AD_LDAP_PORT", 0)
 AD_USE_SSL = getattr(settings, "AD_USE_SSL", False)
-AD_SEARCH_BASE = getattr(settings, "AD_LDAP_BASE", "")
+AD_SEARCH_BASE = getattr(settings, "AD_SEARCH_BASE", "")
 AD_SEARCH_FILTER = getattr(
     settings,
     "AD_SEARCH_FILTER",
@@ -76,7 +81,10 @@ def do_ldap_search(username: str, password: str) -> tuple:
 
     conn = None
     ldap_auth = SIMPLE
-    ldap_user = username
+    ldap_user = '{realm}\{username}'.format(
+        realm=AD_SHORT_REALM,
+        username=username
+    )
     ldap_password = password
     
     # By default we assume to use the kerberos credentials to bind, but it
