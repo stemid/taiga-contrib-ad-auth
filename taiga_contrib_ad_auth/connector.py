@@ -95,7 +95,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
             check_names=True
         )
     except Exception as e:
-        raise LDAPLoginError({'error_message': str(e)})
+        raise ADLoginError({'error_message': str(e)})
 
     search_filter = AD_SEARCH_FILTER.format(
         username=username
