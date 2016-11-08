@@ -26,6 +26,11 @@ def test_ad_login_success():
         config.get('DEFAULT', 'password')
     )
 
+    print('Success: {email}, {username}'.format(
+        email=email,
+        username=username
+    ))
+
 
 if __name__ == '__main__':
     test_ad_login_success()
