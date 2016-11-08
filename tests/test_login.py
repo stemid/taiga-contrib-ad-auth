@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# I don't know how to use Mock or pytest so this is the best test I can think
+# of. It works if you run it alongside a configured taiga-back install.
 
 import sys
 from configparser import RawConfigParser
@@ -23,3 +25,7 @@ def test_ad_login_success():
         config.get('DEFAULT', 'username'),
         config.get('DEFAULT', 'password')
     )
+
+
+if __name__ == '__main__':
+    test_ad_login_success()

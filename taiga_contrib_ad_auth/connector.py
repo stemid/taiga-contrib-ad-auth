@@ -80,7 +80,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
     
     # By default we assume to use the kerberos credentials to bind, but it
     # is possible to use a pre-defined DN.
-    if AD_BIND_DN not None:
+    if AD_BIND_DN is not None:
         ldap_user = AD_BIND_DN
         ldap_password = AD_BIND_PASSWORD
 
@@ -91,7 +91,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
             client_strategy=SYNC,
             user=ldap_user,
             password=ldap_password,
-            authentication=ldap_auth
+            authentication=ldap_auth,
             check_names=True
         )
     except Exception as e:
@@ -125,7 +125,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
 
 def login(email: str, password: str) -> tuple:
     
-    allowed_domains = AD_ALLOWED_DOMAINS + [REALM]
+    allowed_domains = AD_ALLOWED_DOMAINS + [AD_REALM]
 
     validate_email = EmailValidator(whitelist=allowed_domains)
 
@@ -148,7 +148,7 @@ def login(email: str, password: str) -> tuple:
         raise ADLoginError({'error_message': 'Invalid domain in e-mail'})
 
     try:
-        checkPassword(username, password, "", REALM)
+        checkPassword(username, password, "", AD_REALM)
     except BasicAuthError as e:
         errmsg, _junk = e.args
         if errmsg == "Cannot contact any KDC for requested realm":
