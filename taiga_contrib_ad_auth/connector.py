@@ -163,14 +163,14 @@ def login(email: str, password: str) -> tuple:
         raise ADLoginError({'error_message': str(e)})
 
     # Lookup email and username from AD
-    (email, fullname) = None, None
+    (ldap_email, ldap_fullname) = None, None
     try:
-        email, fullname = do_ldap_search(username, password)
+        ldap_email, ldap_fullname = do_ldap_search(username, password)
     except Exception as e:
         pass
 
     # Return a fullname property if available from LDAP query.
-    if fullname is not None:
+    if ldap_fullname is not None:
         username = fullname
 
     return (email, username)
