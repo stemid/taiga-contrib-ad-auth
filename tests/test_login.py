@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import pytest
 import sys
 from configparser import RawConfigParser
 
@@ -17,7 +16,7 @@ conf_defaults = {
 }
 
 config = RawConfigParser(defaults=conf_defaults)
-config.readfp(open('tests_local.cfg'))
+config.readfp(open('tests/tests_local.cfg'))
 
 def test_ad_login_success():
     (email, username) = connector.login(
