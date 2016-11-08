@@ -22,6 +22,12 @@ Install dependencies on CentOS.
 
 Some other package names on Debian, including `libkrb5-dev`.
 
+Install the plugin, in your taiga-back virtualenv for example.
+
+```bash
+	python setup.py install
+```
+
 Finally, modify your `settings/local.py` and include it on `INSTALLED_APPS` and add your AD configuration:
 
 ```python
