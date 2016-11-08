@@ -171,7 +171,7 @@ def login(email: str, password: str) -> tuple:
 
     # Return a fullname property if available from LDAP query.
     if ldap_fullname is not None:
-        username = fullname
+        username = ldap_fullname
 
     return (email, username)
 
