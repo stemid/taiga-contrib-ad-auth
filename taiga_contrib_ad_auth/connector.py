@@ -11,7 +11,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import kerberos
+from kerberos import checkPassword, BasicAuthError
 from ldap3 import Server, Connection
 from ldap3 import SIMPLE, SYNC, ASYNC, SUBTREE, NONE
 
@@ -21,6 +21,8 @@ from django.core.validators import EmailValidator
 from taiga.base.connectors.exceptions import ConnectorBaseException
 
 
+# Placeholders to allow for catching of errors from different parts of this
+# plugin.
 class KerberosLoginError(ConnectorBaseException):
     pass
 
@@ -53,7 +55,8 @@ AD_FULLNAME_PROPERTY = getattr(settings, "AD_FULLNAME_PROPERTY", "name")
 
 def do_ldap_search(username: str, password: str) -> tuple:
     """
-    Returns fullname and email address from active directory.
+    Searches the AD using the provided credentials from kerberos login and
+    returns fullname and email address.
     """
 
     use_ssl = False
@@ -120,7 +123,7 @@ def do_ldap_search(username: str, password: str) -> tuple:
         return (email, fullname)
 
 
-def login(email, password):
+def login(email: str, password: str) -> tuple:
     
     allowed_domains = AD_ALLOWED_DOMAINS + [REALM]
 
@@ -145,17 +148,17 @@ def login(email, password):
         raise ADLoginError({'error_message': 'Invalid domain in e-mail'})
 
     try:
-        kerberos.checkPassword(username, password, "", REALM)
-    except kerberos.BasicAuthError as e:
+        checkPassword(username, password, "", REALM)
+    except BasicAuthError as e:
         errmsg, _junk = e.args
         if errmsg == "Cannot contact any KDC for requested realm":
             errmsg = "Error connecting to KERBEROS server"
-            raise KERBEROSLoginError({"error_message": errmsg})
+            raise KerberosLoginError({"error_message": errmsg})
         elif errmsg == "Decrypt integrity check failed":
             errmsg = "KERBEROS account or password incorrect"
-            raise KERBEROSLoginError({"error_message": errmsg})
+            raise KerberosLoginError({"error_message": errmsg})
         else:
-            raise KERBEROSLoginError({"error_message": errmsg})
+            raise KerberosLoginError({"error_message": errmsg})
     except Exception as e:
         raise ADLoginError({'error_message': str(e)})
 

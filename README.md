@@ -1,7 +1,13 @@
 Taiga contrib AD auth
 =======================
 
-The Taiga plugin for Active Directory authentication
+The Taiga plugin for Active Directory authentication.
+
+This is a combination of taiga-contrib-ldap-auth and taiga-contrib-kerberos-auth because I felt there was a need for an AD plugin that could authenticate using kerberos and fetch attributes using ldap.
+
+So this plugin first and foremost authenticates using Kerberos, and if this auth fails the plugin also fails. 
+
+At success the plugin attempts to fetch attributes from AD using ldap and the provided credentials that it used to authenticate with kerberos.
 
 Installation
 ------------
@@ -43,6 +49,6 @@ Change in your `dist/js/conf.json` the `loginFormType` setting to `"ad"`:
 ```
 
 
-### Credits:
+### Credits
 
 Based on ldap code fom [enskylin](https://github.com/ensky/taiga-contrib-ldap-auth) and kerberos code from [dpasqualin](https://github.com/dpasqualin/taiga-contrib-kerberos-auth).
