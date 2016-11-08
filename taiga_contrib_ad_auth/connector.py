@@ -39,8 +39,8 @@ AD_ALLOWED_DOMAINS = getattr(settings, "AD_ALLOWED_DOMAINS", [])
 AD_DEFAULT_DOMAIN = getattr(settings, "AD_DEFAULT_DOMAIN", AD_REALM)
 
 # LDAP
-AD_LDAP_SERVER = getattr(settings, "AD_SERVER", "")
-AD_LDAP_PORT = getattr(settings, "AD_PORT", 0)
+AD_LDAP_SERVER = getattr(settings, "AD_LDAP_SERVER", "")
+AD_LDAP_PORT = getattr(settings, "AD_LDAP_PORT", 0)
 AD_SEARCH_BASE = getattr(settings, "AD_LDAP_BASE", "")
 AD_SEARCH_FILTER = getattr(
     settings,
