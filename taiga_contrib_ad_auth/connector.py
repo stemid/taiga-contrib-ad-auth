@@ -41,6 +41,7 @@ AD_DEFAULT_DOMAIN = getattr(settings, "AD_DEFAULT_DOMAIN", AD_REALM)
 # LDAP
 AD_LDAP_SERVER = getattr(settings, "AD_LDAP_SERVER", "")
 AD_LDAP_PORT = getattr(settings, "AD_LDAP_PORT", 0)
+AD_USE_SSL = getattr(settings, "AD_USE_SSL", False)
 AD_SEARCH_BASE = getattr(settings, "AD_LDAP_BASE", "")
 AD_SEARCH_FILTER = getattr(
     settings,
@@ -60,13 +61,13 @@ def do_ldap_search(username: str, password: str) -> tuple:
     """
 
     use_ssl = False
-    if AD_LDAP_SERVER.lower().startswith('ldaps://'):
+    if AD_LDAP_SERVER.lower().startswith('ldaps://') or AD_USE_SSL:
         use_ssl = True
 
     try:
         server = Server(
             AD_LDAP_SERVER,
-            port=AD_LDAP_PORT,
+            port=int(AD_LDAP_PORT),
             get_info=NONE,
             use_ssl=use_ssl
         )
